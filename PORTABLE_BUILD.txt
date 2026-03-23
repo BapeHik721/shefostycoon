@@ -1,0 +1,38 @@
+Портабельный один exe (всё внутри: картинки, mp3, игра)
+=====================================================
+
+Готовый файл: dist\SHEFOS_Tycoon.exe
+Его можно копировать куда угодно одним файлом.
+Сохранение: shefos_save.enc появляется в той же папке, что и exe.
+
+Как собрать самому (Windows, из папки проекта)
+----------------------------------------------
+Сборка ДОЛЖНА идти из Python, где уже стоят pygame и cryptography.
+Если собрать «голым» системным python без пакетов — в exe не попадёт
+cryptography и при запуске будет ModuleNotFoundError.
+
+1) Рекомендуется venv в папке проекта:
+   python -m venv .venv
+   .venv\Scripts\pip install pygame cryptography "pyinstaller>=6.0"
+
+2) Собрать:
+   .venv\Scripts\python -m PyInstaller --clean -y shefostycoon.spec
+
+   Или дважды кликнуть: build_portable.bat (он сам возьмёт .venv\Scripts\python.exe)
+
+В spec-файле shefostycoon.spec автоматически подхватываются все
+*.png, *.mp3, *.jpg, *.jpeg, *.webp, *.ogg, *.wav из корня проекта.
+
+Если добавил новый тип файла — допиши шаблон в shefostycoon.spec
+(цикл for pattern in (...)).
+
+Другой проект на PyInstaller (кратко)
+-------------------------------------
+  python -m PyInstaller --onefile --windowed --name MyGame main.py
+
+Чтобы положить картинки внутрь exe, добавь:
+  --add-data "файл.png;."     (Windows: точка с запятой)
+  или несколько раз --add-data ...
+
+В коде при frozen-запуске путь к ресурсам — sys._MEIPASS (см. Tycoon.py:
+RESOURCE_ROOT / DATA_ROOT).
