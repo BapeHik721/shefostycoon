@@ -1,0 +1,1 @@
+# оу да, крутая helloworld("print") игра про shefos 320 kg 
